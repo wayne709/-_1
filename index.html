@@ -1,0 +1,1057 @@
+<!doctype html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>周杰倫 作品展示 — 專業強化版（單檔）</title>
+
+    <style>
+        /* ---------- 根色彩與基礎 ---------- */
+        :root {
+            --bg: #071029;
+            --bg2: #001219;
+            --card: #0f172a;
+            --text: #e6eef8;
+            --muted: #a9c0ff;
+            --accent1: #1f6feb;
+            --accent2: #8b5cf6;
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-2: rgba(255, 255, 255, 0.03);
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f7fb;
+            --bg2: #e9eef9;
+            --card: #fff;
+            --text: #0b1b2b;
+            --muted: #375a9b;
+            --accent1: #2563eb;
+            --accent2: #7c3aed;
+            --glass: rgba(2, 6, 23, 0.03);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: radial-gradient(ellipse at top left, var(--bg) 0%, var(--bg2) 100%);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header / nav */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.06));
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03)
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px
+        }
+
+        .brand {
+            font-weight: 800;
+            font-size: 18px
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            margin-left: 12px
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 8px
+        }
+
+        .nav-links a:hover {
+            background: var(--glass);
+            color: var(--text)
+        }
+
+        .actions {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2)
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 8px;
+            border-radius: 10px;
+            color: var(--muted);
+            cursor: pointer
+        }
+
+        /* 修正版：按鈕清單 */
+        .simple-btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px
+        }
+
+        .simple-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            transition: all .2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4)
+        }
+
+        .simple-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.45)
+        }
+
+        .simple-list-row {
+            width: 100%;
+            display: flex;
+            gap: 12px
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 28px auto;
+            padding: 0 20px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            align-items: start
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid var(--glass);
+            box-shadow: 0 12px 40px rgba(2, 6, 23, 0.45)
+        }
+
+        .cover {
+            width: 100%;
+            height: 360px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.04)
+        }
+
+        .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block
+        }
+
+        /* Song list */
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 64vh;
+            overflow: auto;
+            padding-right: 6px
+        }
+
+        .song-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: all .28s cubic-bezier(.2, .9, .2, 1)
+        }
+
+        .song-item.visible {
+            opacity: 1;
+            transform: none
+        }
+
+        .song-item:hover {
+            background: var(--glass)
+        }
+
+        .song-item.active {
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            color: white;
+            box-shadow: 0 8px 24px rgba(31, 111, 235, 0.12)
+        }
+
+        /* Article */
+        .article h2 {
+            font-size: 20px;
+            margin-bottom: 10px
+        }
+
+        .article p {
+            line-height: 1.8;
+            color: var(--text)
+        }
+
+        /* Profile */
+        .jay-profile {
+            padding: 18px;
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 16px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
+            border: 1px solid var(--glass);
+            margin-bottom: 18px
+        }
+
+        .jay-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px
+        }
+
+        /* Footer notes */
+        .footer-note {
+            color: var(--muted);
+            text-align: center;
+            margin-top: 12px
+        }
+
+        /* Play overlay (大按鈕) */
+        .play-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(2, 6, 23, 0.65), rgba(2, 6, 23, 0.85));
+            z-index: 120;
+            backdrop-filter: blur(6px)
+        }
+
+        .play-overlay .card {
+            max-width: 760px;
+            text-align: center
+        }
+
+        .play-overlay button {
+            font-size: 20px;
+            padding: 14px 22px;
+            border-radius: 12px
+        }
+
+        /* Typewriter for description */
+        .typewriter {
+            white-space: pre-wrap;
+            overflow: hidden;
+            border-right: .12em solid rgba(255, 255, 255, 0.12);
+            animation: caret 1s steps(1) infinite;
+        }
+
+        @keyframes caret {
+            50% {
+                border-color: transparent
+            }
+        }
+
+        /* Fade-in elements */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all .5s ease;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Responsive */
+        @media(max-width:980px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            .cover {
+                height: 240px
+            }
+
+            .jay-profile {
+                grid-template-columns: 1fr
+            }
+
+            .song-list {
+                flex-direction: row;
+                overflow: auto;
+                padding-bottom: 8px
+            }
+
+            .song-item {
+                min-width: 220px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <nav class="nav">
+            <div class="brand">周杰倫 作品展示（專業強化）</div>
+            <div class="nav-links">
+                <a href="#profile">關於</a>
+                <a href="#songs">作品</a>
+                <a href="#about">關於此站</a>
+            </div>
+            <div class="actions">
+                <button id="themeBtn" class="icon-btn" title="切換主題">🌙</button>
+                <button id="openImport" class="icon-btn" title="匯入歌單">📥 匯入</button>
+                <button id="downloadSite" class="btn" title="下載整站">下載站台</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Profile -->
+        <section id="profile" class="card jay-profile fade-in">
+            <div class="jay-photo"><img
+                    src="https://tse1.mm.bing.net/th/id/OIP.4dG9OVq-SXLG3WuRVH0y0gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3&adlt=strict.jpeg"
+                    alt="周杰倫"></div>
+            <div>
+                <h1 style="margin:0 0 6px 0">周杰倫 · Jay Chou</h1>
+                <p style="margin:0 0 10px;color:var(--muted)">創作歌手 · 製作人 · 導演 · 華語流行文化的風格締造者</p>
+                <div class="kv"><b>出生</b><span>1979-01-18（台北）</span></div>
+                <div class="kv"><b>專長</b><span>作曲、編曲、鋼琴、製作、導演</span></div>
+                <div class="kv"><b>出道</b><span>2000《Jay》</span></div>
+
+                <h3 style="margin-top:12px">代表成就</h3>
+                <ul style="margin-top:8px;color:var(--text);line-height:1.7">
+                    <li>創新融合中西音樂語彙，建立「周氏風格」。</li>
+                    <li>跨界電影導演與演出，作品具有強烈畫面感。</li>
+                    <li>影響整整一代人的青春與流行文化風貌。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Main grid -->
+        <section id="songs" class="grid">
+            <!-- 左側：清單 -->
+            <div class="card fade-in" style="transition-delay:.05s">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <div><strong>作品清單</strong>
+                        <div class="small">點選或用左右鍵切歌</div>
+                    </div>
+                    <div class="small">支援匯入 JSON / CSV</div>
+                </div>
+
+                <div class="song-list" id="songList" role="list" aria-label="作品清單"></div>
+
+                <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+                    <input id="importInput" type="file" accept=".json,.csv" style="display:none" />
+                    <button id="importBtn" class="icon-btn">📁 匯入</button>
+                    <button id="addSampleBtn" class="icon-btn">➕ 加入更多範例</button>
+                    <button id="clearBtn" class="icon-btn">🗑 清除歌單</button>
+                </div>
+
+                <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+                    你也可以把整個歌單匯出成 JSON（右上「下載站台」會包整頁）。
+                </div>
+            </div>
+
+            <!-- 右側：顯示 -->
+            <div class="card fade-in" style="transition-delay:.1s">
+                <div class="cover" id="coverDisplay"><img id="coverImg" src="" alt="cover"></div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+                    <div>
+                        <h2 id="songTitle" style="margin:0">—</h2>
+                        <div id="songTags" style="margin-top:6px;color:var(--muted)"></div>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <button id="prevBtn" class="icon-btn" title="上一首">◀</button>
+                        <button id="playToggle" class="btn" title="播放 / 暫停">播放</button>
+                        <button id="nextBtn" class="icon-btn" title="下一首">▶</button>
+                    </div>
+                </div>
+
+                <article class="article" id="songArticle" style="margin-top:14px">
+                    <h2>作品介紹</h2>
+                    <p id="songDesc" class="typewriter">請從左側選擇一首歌曲，或匯入你的完整歌單。</p>
+
+                    <h2 style="margin-top:18px">觀看 MV（同步音訊）</h2>
+                    <div style="position:relative;padding-top:56.25%;margin-top:8px">
+                        <div id="mvWrapper"
+                            style="position:absolute;inset:0;border-radius:8px;overflow:hidden;background:#000">
+                            <div id="mvPlayerContainer" style="width:100%;height:100%;background:#000"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:10px;display:flex;gap:10px;align-items:center">
+                        <label class="small" style="margin-right:6px">自動播放 MV 音量：</label>
+                        <input id="mvVolume" type="range" min="0" max="1" step="0.01" value="0.75" />
+                        <label class="small">背景音樂音量：</label>
+                        <input id="bgVolume" type="range" min="0" max="1" step="0.01" value="0.9" />
+                    </div>
+                </article>
+            </div>
+
+            <!-- 下方：外部連結按鈕 -->
+            <section style="margin-bottom: 28px;">
+                <h2 style="margin-top:0;margin-bottom: 20px;">快速 YouTube 連結</h2>
+                <div class="simple-btn-container">
+                    <a href="https://www.youtube.com/watch?v=3da0K8wH4Ns" class="simple-btn" target="_blank">青花瓷（YT）</a>
+                    <a href="https://www.youtube.com/watch?v=3da0K8wH4Ns" class="simple-btn" target="_blank">七里香（YT）</a>
+                    <div class="simple-list-row"><a href="https://www.youtube.com/watch?v=4v6bR0wTqTc"
+                            class="simple-btn" target="_blank">不能說的秘密（YT）</a></div>
+                    <a href="https://www.youtube.com/watch?v=6hD9kYy1r1g" class="simple-btn" target="_blank">夜曲（YT）</a>
+                    <a href="https://www.youtube.com/watch?v=0zsc3wD2W-k" class="simple-btn" target="_blank">稻香（YT）</a>
+                    <a href="https://www.youtube.com/watch?v=mRyq-6XMSSQ" class="simple-btn" target="_blank">晴天（YT）</a>
+                </div>
+            </section>
+
+            <!-- 關於此站 -->
+            <section id="about" class="card fade-in" style="margin-top:22px">
+                <h2>關於此站</h2>
+                <p>這是一個示範型的單檔作品展示頁面，支援一次匯入大量歌單、播放背景音樂、嵌入 MV 並控制音量。<br>
+                    如果瀏覽器阻擋自動播放，請按頁面中央的大播放鍵以啟動聲音與 MV（僅需一次互動）。</p>
+                <p class="small">備註：本站示範的音訊檔與 MV 多為外部連結；請在遵守版權下使用。若有正規檔案（mp3），可在 songs 資料中指定 audio 屬性以達到更佳同步與音質。</p>
+            </section>
+
+            <!-- 感想（已升級） -->
+            <div class="footer-note fade-in" style="margin-top:18px">
+                <h2>感想 / 啟發</h2>
+                <p style="max-width:900px;margin:8px auto 0;color:var(--muted);line-height:1.7">
+                    周杰倫的成長與創作歷程告訴我們：不是每個人在標準化測驗中都會發光，但在合適的舞台與熱情前，任何人都有可能綻放。專注、實驗以及跨文化的勇氣，使他能把東方文學感與現代流行節拍編織成令人難忘的音樂記憶。這份勇氣，值得每一位創作者學習。
+                </p>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Play overlay（當自動播放被阻擋時顯示） -->
+    <div id="playOverlay" class="play-overlay" style="display:none">
+        <div class="card">
+            <h2>開始播放 — 啟動音樂與 MV</h2>
+            <p class="small" style="color:var(--muted);max-width:720px;margin:8px auto 14px">
+                瀏覽器可能會阻擋未互動的自動播放。按下下方按鈕以啟動背景音樂與嵌入 MV 的聲音。</p>
+            <button id="startAll" class="btn">▶ 開始播放</button>
+            <div style="margin-top:12px">
+                <button id="dismissOverlay" class="icon-btn">稍後再說</button>
+            </div>
+        </div>
+    </div>
+
+    <footer style="padding:18px;text-align:center;color:var(--muted)">
+        <div style="max-width:1100px;margin:0 auto">此檔案為示範。若要匯出內容或加入自己的音訊檔，請用匯入功能或直接編輯 songs 陣列。</div>
+    </footer>
+
+    <!-- ---------------- JS 邏輯（歌單、多專輯、動畫、播放） ---------------- -->
+    <script>
+        /* ========= 資料：多專輯、多歌曲（示例資料，desc 為長篇） ========= */
+        const albums = [
+            {
+                id: 'album_classics',
+                title: '經典代表作',
+                year: '2000-2010',
+                songs: [
+                    {
+                        id: 'qihuaci',
+                        title: '青花瓷',
+                        cover: 'https://i.ytimg.com/vi/z6ZN1F4G5WY/maxresdefault.jpg',
+                        tags: '中國風 · 2007',
+                        audio: 'https://cdn.simple-music.net/example/audio/qihuaci.mp3', // 範例：若你有 mp3 可替換
+                        mv: 'https://www.youtube.com/embed/3da0K8wH4Ns',
+                        desc: `《青花瓷》以東方古典的畫意為核心，像一捲在耳邊緩緩展開的水墨畫。周杰倫用細膩的旋律擘畫出青白瓷的紋理與隱藏其中的情感，方文山的詞則用毛筆般的意象勾勒出雨巷、月色與憶念。編曲上以古箏、琵琶與弦樂相襯，讓整首歌在流行節拍中同時保有古典的冷冽美感，成為「中國風」在商業流行樂場景中的代表性作品之一。`
+                    },
+                    {
+                        id: 'qing-tian',
+                        title: '晴天',
+                        cover: 'https://i.ytimg.com/vi/mRyq-6XMSSQ/hqdefault.jpg',
+                        tags: '抒情 · 2003',
+                        audio: 'https://cdn.simple-music.net/example/audio/qingtian.mp3',
+                        mv: 'https://www.youtube.com/embed/mRyq-6XMSSQ',
+                        desc: `《晴天》以簡潔而溫暖的旋律，描述愛情回憶與心靈微光。它的旋律朗朗上口，歌詞以日常意象切入，用最純粹的情感投射出一種可回溯的青春記憶，使得它成為許多人懷念青春與愛情的情感出口。`
+                    },
+                    {
+                        id: 'qingxiang',
+                        title: '稻香',
+                        cover: 'https://img.pconline.com.cn/images/upload/upc/tx/photoblog/1908/08/c4/163480953_1565247824655_mthumb.jpg',
+                        tags: '鄉村 / 勵志 · 2008',
+                        audio: 'https://cdn.simple-music.net/example/audio/daoxiang.mp3',
+                        mv: 'https://www.youtube.com/embed/0zsc3wD2W-k',
+                        desc: `《稻香》回到最樸實的記憶：田野、童年與家庭。周杰倫用輕快的節奏和溫暖的編曲，傳達對當下的寬慰與對純真生活的懷念；它同時也是一首勵志曲，提醒我們別忘了根與初心。`
+                    },
+                    {
+                        id: 'shuang-jiegun',
+                        title: '雙截棍',
+                        cover: 'https://i.ytimg.com/vi/DYh8nKQzL5U/maxresdefault.jpg',
+                        tags: '嘻哈 · 2001',
+                        audio: '',
+                        mv: 'https://www.youtube.com/embed/qqgC0xZ3J1w',
+                        desc: `《雙截棍》將武術節奏與嘻哈節拍結合，是周杰倫將東方武術文化融入流行音樂的早期代表。強烈節奏與口語化的押韻，使歌曲充滿力量與街頭感。`
+                    }
+                ]
+            },
+            {
+                id: 'album_romance',
+                title: '浪漫抒情',
+                year: '2002-2010',
+                songs: [
+                    {
+                        id: 'cantell',
+                        title: '不能說的秘密',
+                        cover: 'https://tse3.mm.bing.net/th/id/OIP.9nv2hJEEG3glmddXxeT52QHaHa?rs=1&pid=ImgDetMain&o=7&rm=3&adlt=strict.jpg',
+                        tags: '電影主題曲 · 2007',
+                        audio: 'https://cdn.simple-music.net/example/audio/cantell.mp3',
+                        mv: 'https://www.youtube.com/embed/4v6bR0wTqTc',
+                        desc: `作為同名電影的主題曲，《不能說的秘密》以鋼琴為核心，編織出穿越時間的愛情寓言。旋律既帶有淡淡的哀愁，又能在關鍵時刻爆發情感張力，讓人聆聽時象徵著一段跨越與遺憾的青春。`
+                    },
+                    {
+                        id: 'yequ',
+                        title: '夜曲',
+                        cover: 'https://tse4.mm.bing.net/th/id/OIP.GKvk0j3MoURNqsmLzVHCdgHaFf?rs=1&pid=ImgDetMain&o=7&rm=3&adlt=strict.jpg',
+                        tags: '古典搖滾 · 2005',
+                        audio: '',
+                        mv: 'https://www.youtube.com/embed/6hD9kYy1r1g',
+                        desc: `《夜曲》帶有黑色敘事與戲劇張力，將悼念與愛情交織成一首如電影般的情歌。古典弦樂與現代節奏融合，營造出濃厚的情緒空間。`
+                    }
+                ]
+            },
+            {
+                id: 'album_modern',
+                title: '實驗與嘗試',
+                year: '2010-2020',
+                songs: [
+                    {
+                        id: 'modern_1',
+                        title: '示範新曲 A',
+                        cover: 'https://picsum.photos/seed/jayA/800/500',
+                        tags: '實驗 · 2015',
+                        audio: '',
+                        mv: '',
+                        desc: `示範曲目，用來展示多首大量匯入的情況與 RWD 顯示。`
+                    },
+                    // 更多可在此加入
+                ]
+            }
+        ];
+
+        // flatten songs to一個陣列（方便 list 與切歌）
+        let songs = [];
+        albums.forEach(al => al.songs.forEach(s => songs.push({ ...s, albumTitle: al.title, albumYear: al.year })));
+
+        /* ======= DOM refs ======= */
+        const songListEl = document.getElementById('songList');
+        const coverImg = document.getElementById('coverImg');
+        const songTitle = document.getElementById('songTitle');
+        const songTags = document.getElementById('songTags');
+        const songDesc = document.getElementById('songDesc');
+
+        const mvPlayerContainer = document.getElementById('mvPlayerContainer');
+        const mvVolumeEl = document.getElementById('mvVolume');
+        const bgVolumeEl = document.getElementById('bgVolume');
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const playToggle = document.getElementById('playToggle');
+
+        const playOverlay = document.getElementById('playOverlay');
+        const startAll = document.getElementById('startAll');
+        const dismissOverlay = document.getElementById('dismissOverlay');
+
+        /* ====== state ====== */
+        let currentIndex = 0;
+        let isPlaying = false;
+        let audioEl = null; // background audio element
+        let ytPlayer = null; // YouTube player instance (IFrame API)
+        let autoplayAttempted = false;
+
+        /* ========= Build list ========== */
+        function rebuildList() {
+            songListEl.innerHTML = '';
+            songs.forEach((s, idx) => {
+                const el = document.createElement('div');
+                el.className = 'song-item';
+                el.dataset.idx = idx;
+                el.innerHTML = `
+      <div style="width:64px;height:64px;border-radius:8px;overflow:hidden;flex-shrink:0">
+        <img src="${s.cover || 'https://picsum.photos/seed/fallback/400/300'}" alt="${s.title}" style="width:100%;height:100%;object-fit:cover">
+      </div>
+      <div style="flex:1">
+        <div style="font-weight:700">${s.title || '—'}</div>
+        <div style="font-size:13px;color:var(--muted)">${s.albumTitle ? s.albumTitle + ' · ' + s.albumYear : (s.tags || '')}</div>
+      </div>
+    `;
+                el.addEventListener('click', () => loadSong(idx, { userTriggered: true }));
+                songListEl.appendChild(el);
+
+                // staggered reveal animation
+                setTimeout(() => el.classList.add('visible'), idx * 40);
+            });
+        }
+
+        /* ======== Load a song ======== */
+        function loadSong(i, opts = {}) {
+            if (songs.length === 0) return;
+            if (i < 0) i = songs.length - 1;
+            if (i >= songs.length) i = 0;
+            currentIndex = i;
+            const s = songs[i];
+
+            // UI updates
+            coverImg.src = s.cover || '';
+            songTitle.textContent = s.title || '—';
+            songTags.textContent = (s.tags ? s.tags + ' · ' : '') + (s.albumTitle || '');
+            // typewriter effect for desc
+            setTypewriterText(songDesc, s.desc || '—');
+
+            // MV: 使用 YouTube IFrame 或填空（先清空 container）
+            setupMV(s.mv);
+
+            // highlight active
+            document.querySelectorAll('.song-item').forEach(el => el.classList.remove('active'));
+            const active = document.querySelector(`.song-item[data-idx="${i}"]`);
+            if (active) active.classList.add('active');
+
+            // audio: 若歌曲宣告有 audio 屬性，則切換 audio source
+            if (s.audio) {
+                ensureAudioElement();
+                if (audioEl.src !== s.audio) {
+                    audioEl.src = s.audio;
+                    audioEl.load();
+                    // 若正在播放或使用者觸發自動播放，嘗試播放
+                    if (isPlaying || opts.userTriggered) {
+                        attemptPlayAudio();
+                    }
+                }
+            } else {
+                // 若沒有 audio 屬性，不自動替換，保留目前 audio
+            }
+
+            // store last index
+            try { localStorage.setItem('jj_current', i); } catch (e) { }
+        }
+
+        /* Typewriter: 逐字顯示（長文） */
+        function setTypewriterText(el, text) {
+            el.classList.remove('typewriter');
+            el.textContent = '';
+            // 分批顯示
+            let i = 0;
+            const speed = 18; // ms per char
+            clearInterval(el._twInterval);
+            el._twInterval = setInterval(() => {
+                i++;
+                el.textContent = text.slice(0, i);
+                el.classList.add('typewriter');
+                if (i >= text.length) {
+                    clearInterval(el._twInterval);
+                    el.classList.remove('typewriter'); // 停止游標
+                }
+            }, speed);
+        }
+
+        /* ======== Audio handling ======== */
+        function ensureAudioElement() {
+            if (!audioEl) {
+                audioEl = document.createElement('audio');
+                audioEl.id = 'bgAudio';
+                audioEl.crossOrigin = 'anonymous';
+                audioEl.loop = false;
+                audioEl.preload = 'auto';
+                audioEl.style.display = 'none';
+                document.body.appendChild(audioEl);
+
+                audioEl.addEventListener('play', () => {
+                    isPlaying = true; playToggle.textContent = '暫停';
+                });
+                audioEl.addEventListener('pause', () => {
+                    isPlaying = false; playToggle.textContent = '播放';
+                });
+                audioEl.addEventListener('ended', () => {
+                    // 預設行為：下一首
+                    loadSong(currentIndex + 1, { userTriggered: false });
+                    attemptPlayAudio();
+                });
+
+                // 連動 volume slider
+                bgVolumeEl.addEventListener('input', () => {
+                    audioEl.volume = parseFloat(bgVolumeEl.value);
+                });
+            }
+        }
+
+        /* 強制嘗試播放（可能會被瀏覽器阻擋） */
+        async function attemptPlayAudio() {
+            if (!audioEl) return;
+            try {
+                await audioEl.play();
+                isPlaying = true;
+                playToggle.textContent = '暫停';
+                // 若有 YT player，也嘗試播放
+                if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                    try {
+                        ytPlayer.unMute();
+                        ytPlayer.playVideo();
+                    } catch (e) { }
+                }
+                playOverlay.style.display = 'none';
+            } catch (err) {
+                // 被阻擋：顯示大按鈕，等使用者交互
+                console.warn('Autoplay blocked:', err);
+                playOverlay.style.display = 'flex';
+            }
+        }
+
+        /* play/pause toggle */
+        playToggle.addEventListener('click', async () => {
+            ensureAudioElement();
+            if (!audioEl.src && songs[currentIndex] && songs[currentIndex].audio) {
+                audioEl.src = songs[currentIndex].audio;
+                audioEl.load();
+            }
+            if (isPlaying) {
+                audioEl.pause();
+                if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+            } else {
+                await attemptPlayAudio();
+            }
+        });
+
+        /* Prev/Next */
+        prevBtn.addEventListener('click', () => loadSong(currentIndex - 1, { userTriggered: true }));
+        nextBtn.addEventListener('click', () => loadSong(currentIndex + 1, { userTriggered: true }));
+
+        /* Keyboard */
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevBtn.click();
+            if (e.key === 'ArrowRight') nextBtn.click();
+            if (e.key === ' ' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                playToggle.click();
+            }
+        });
+
+        /* ======== MV: youtube iframe / setup ======== */
+        /* 方案：若 mv 是 youtube embed URL，使用 IFrame API 以便我們控制播放/靜音/音量。 */
+        function setupMV(mv) {
+            mvPlayerContainer.innerHTML = ''; // reset
+            if (!mv) {
+                mvPlayerContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted)">此曲無 MV 或連結。</div>';
+                return;
+            }
+            // 解析 youtube embed 或 watch?v=
+            let ytId = null;
+            if (mv.includes('youtube.com/embed/')) {
+                ytId = mv.split('embed/')[1].split(/[?&]/)[0];
+            } else if (mv.includes('youtube.com/watch')) {
+                const params = new URLSearchParams(mv.split('?')[1] || '');
+                ytId = params.get('v');
+            } else if (mv.includes('youtu.be/')) {
+                ytId = mv.split('youtu.be/')[1].split(/[?&]/)[0];
+            }
+
+            if (ytId) {
+                // create iframe for yt
+                const iframe = document.createElement('div');
+                iframe.id = 'ytPlayer';
+                mvPlayerContainer.appendChild(iframe);
+                // Create IFrame player (load API if not yet)
+                createYouTubePlayer(ytId);
+            } else {
+                // other embed: just put iframe
+                const f = document.createElement('iframe');
+                f.src = mv;
+                f.style.width = '100%'; f.style.height = '100%'; f.frameBorder = '0';
+                f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                f.allowFullscreen = true;
+                mvPlayerContainer.appendChild(f);
+            }
+        }
+
+        /* Load YouTube IFrame API (only once) and create player */
+        let ytApiReady = false;
+        let ytCreateQueue = [];
+        function loadYouTubeApiOnce() {
+            if (window.YT && window.YT.Player) {
+                ytApiReady = true; return Promise.resolve();
+            }
+            return new Promise((resolve, reject) => {
+                if (document.getElementById('yt-api')) { // already requested
+                    const check = setInterval(() => {
+                        if (window.YT && window.YT.Player) { clearInterval(check); ytApiReady = true; resolve(); }
+                    }, 200);
+                    setTimeout(() => reject(new Error('YT API load timeout')), 8000);
+                    return;
+                }
+                const tag = document.createElement('script');
+                tag.id = 'yt-api';
+                tag.src = "https://www.youtube.com/iframe_api";
+                document.body.appendChild(tag);
+                window.onYouTubeIframeAPIReady = () => { ytApiReady = true; resolve(); };
+                setTimeout(() => {
+                    if (!ytApiReady) { console.warn('YT API load may have failed'); }
+                }, 7000);
+            });
+        }
+
+        async function createYouTubePlayer(ytId) {
+            await loadYouTubeApiOnce();
+            // remove existing player
+            if (ytPlayer && ytPlayer.destroy) { try { ytPlayer.destroy(); } catch (e) { } }
+            ytPlayer = new YT.Player('ytPlayer', {
+                height: '100%',
+                width: '100%',
+                videoId: ytId,
+                playerVars: {
+                    autoplay: 0, controls: 1, rel: 0, modestbranding: 1, playsinline: 1
+                },
+                events: {
+                    onReady: (e) => {
+                        // set initial volume
+                        e.target.setVolume(Math.round(parseFloat(mvVolumeEl.value) * 100));
+                        // if user already asked to play, attempt play
+                        if (isPlaying) {
+                            try { e.target.playVideo(); e.target.unMute(); } catch (err) { }
+                        }
+                    },
+                    onStateChange: (ev) => {
+                        // state sync: if video plays, optionally pause background audio or adjust
+                        if (ev.data === YT.PlayerState.PLAYING) {
+                            // keep both playing but lower MV volume if needed
+                            // we control MV volume via player.setVolume
+                        }
+                    }
+                }
+            });
+        }
+
+        /* MV / BG volume controls */
+        mvVolumeEl.addEventListener('input', () => {
+            const v = Math.round(parseFloat(mvVolumeEl.value) * 100);
+            if (ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(v);
+        });
+        bgVolumeEl.addEventListener('input', () => {
+            if (audioEl) audioEl.volume = parseFloat(bgVolumeEl.value);
+        });
+
+        /* ======== Attempt auto play on load (may be blocked) ======== */
+        window.addEventListener('DOMContentLoaded', async () => {
+            rebuildList();
+            // restore last index
+            const saved = parseInt(localStorage.getItem('jj_current'));
+            if (!isNaN(saved)) currentIndex = saved;
+            loadSong(currentIndex, { userTriggered: false });
+            // attempt to create audio element and autoplay (will likely be blocked until user interacts)
+            ensureAudioElement();
+            audioEl.volume = parseFloat(bgVolumeEl.value);
+            // attempt autoplay once
+            try {
+                await audioEl.play();
+                isPlaying = true;
+                playToggle.textContent = '暫停';
+            } catch (err) {
+                // blocked -> show overlay prompt
+                console.log('autoplay blocked on load:', err);
+                playOverlay.style.display = 'flex';
+            }
+
+            // show fade-in elements
+            document.querySelectorAll('.fade-in').forEach((el, i) => setTimeout(() => el.classList.add('show'), i * 80));
+
+            // add drag scroll for song-list on mobile
+            enableTouchScroll(songListEl);
+        });
+
+        /* ======== Import / export / utility ======== */
+        const importInput = document.getElementById('importInput');
+        const importBtn = document.getElementById('importBtn');
+        const openImport = document.getElementById('openImport');
+        openImport.addEventListener('click', () => importInput.click());
+        importBtn.addEventListener('click', () => importInput.click());
+
+        importInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                const text = ev.target.result;
+                try {
+                    const j = JSON.parse(text);
+                    if (Array.isArray(j)) {
+                        // push items
+                        j.forEach(item => {
+                            songs.push({ ...item });
+                        });
+                        rebuildList();
+                        loadSong(songs.length - j.length, { userTriggered: true });
+                        alert('已匯入 ' + j.length + ' 首（JSON）');
+                        return;
+                    } else {
+                        alert('JSON 需為陣列格式 [ {id,title,cover,tags,desc,mv,audio}, ... ]');
+                    }
+                } catch (err) {
+                    // try CSV: 同你原本的邏輯（簡易）
+                    const lines = text.split(/\r?\n/).filter(Boolean);
+                    const header = lines[0].split(',');
+                    let parsed = [];
+                    if (header.map(h => h.toLowerCase()).includes('title')) {
+                        const keys = header.map(h => h.trim().toLowerCase());
+                        for (let i = 1; i < lines.length; i++) {
+                            const cols = lines[i].split(',');
+                            const obj = {};
+                            for (let k = 0; k < cols.length; k++) obj[keys[k]] = cols[k] ? cols[k].trim() : '';
+                            if (obj.title) parsed.push({ id: obj.id || ('csv_' + i), title: obj.title, cover: obj.cover || '', tags: obj.tags || '', desc: obj.desc || '', mv: obj.mv || '', audio: obj.audio || '' });
+                        }
+                    } else {
+                        for (let i = 0; i < lines.length; i++) {
+                            const cols = lines[i].split(',');
+                            parsed.push({ id: 'csv_' + i, title: cols[0] || ('track' + i), cover: cols[1] || '', tags: cols[2] || '', desc: cols[3] || '', mv: cols[4] || '', audio: cols[5] || '' });
+                        }
+                    }
+                    if (parsed.length > 0) {
+                        parsed.forEach(p => songs.push(p));
+                        rebuildList();
+                        loadSong(songs.length - parsed.length, { userTriggered: true });
+                        alert('已匯入 ' + parsed.length + ' 首（CSV）');
+                    } else {
+                        alert('匯入失敗：無法辨識檔案內容或格式。');
+                    }
+                }
+            };
+            reader.readAsText(file, 'utf-8');
+        });
+
+        /* add sample (大量) */
+        document.getElementById('addSampleBtn').addEventListener('click', () => {
+            const count = 20;
+            for (let i = 0; i < count; i++) {
+                songs.push({
+                    id: 'sample_' + Date.now() + '_' + i,
+                    title: '更多曲目 ' + (i + 1),
+                    cover: 'https://picsum.photos/seed/more' + i + '/600/400',
+                    tags: '示範 · 2024',
+                    desc: '這是大量匯入的示範曲目，用來顯示系統能一次載入很多首歌。',
+                    mv: '',
+                    audio: ''
+                });
+            }
+            rebuildList();
+            loadSong(songs.length - count, { userTriggered: false });
+        });
+
+        /* clear */
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            if (!confirm('確定要清空歌單嗎？')) return;
+            songs = [];
+            rebuildList();
+            coverImg.src = '';
+            songTitle.textContent = '—';
+            songDesc.textContent = '歌單已清空';
+        });
+
+        /* Download site snapshot */
+        document.getElementById('downloadSite').addEventListener('click', () => {
+            const html = '<!doctype html>\\n' + document.documentElement.outerHTML;
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'jay_site_snapshot.html';
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        });
+
+        /* Play overlay handlers */
+        startAll.addEventListener('click', async () => {
+            playOverlay.style.display = 'none';
+            ensureAudioElement();
+            // if current song has audio and audioEl not set, set
+            const s = songs[currentIndex];
+            if (s && s.audio && !audioEl.src) {
+                audioEl.src = s.audio; audioEl.load();
+            }
+            try { await attemptPlayAudio(); } catch (e) { console.warn(e); }
+        });
+        dismissOverlay.addEventListener('click', () => { playOverlay.style.display = 'none'; });
+
+        /* Theme toggle */
+        const themeBtn = document.getElementById('themeBtn');
+        function setTheme(t) { document.documentElement.setAttribute('data-theme', t); themeBtn.textContent = t === 'light' ? '☀️' : '🌙'; try { localStorage.setItem('jj_theme', t); } catch (e) { } }
+        themeBtn.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            setTheme(cur);
+        });
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('jj_theme') || 'dark';
+            setTheme(savedTheme);
+        });
+
+        /* Utility: allow touch drag scroll for a container */
+        function enableTouchScroll(el) {
+            let isDown = false, startX, scrollLeft;
+            el.addEventListener('touchstart', (e) => {
+                isDown = true; startX = e.touches[0].pageX - el.offsetLeft; scrollLeft = el.scrollLeft;
+            });
+            el.addEventListener('touchmove', (e) => {
+                if (!isDown) return;
+                const x = e.touches[0].pageX - el.offsetLeft;
+                const walk = (x - startX);
+                el.scrollLeft = scrollLeft - walk;
+            });
+            el.addEventListener('touchend', () => isDown = false);
+        }
+
+        /* Small accessibility: focus first on list after build */
+        songListEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const t = e.target.closest('.song-item');
+                if (t) loadSong(parseInt(t.dataset.idx), { userTriggered: true });
+            }
+        });
+
+        /* END */
+    </script>
+</body>
+
+</html>
